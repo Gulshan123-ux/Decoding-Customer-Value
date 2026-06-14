@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Value Intelligence Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #21262d;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+            
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.15);
+            --cyan: #06b6d4;
+            --cyan-glow: rgba(6, 182, 212, 0.15);
+            --emerald: #10b981;
+            --emerald-glow: rgba(16, 185, 129, 0.15);
+            --amber: #f59e0b;
+            --amber-glow: rgba(245, 158, 11, 0.15);
+            --rose: #f43f5e;
+            --rose-glow: rgba(244, 63, 94, 0.15);
+            --pink: #ec4899;
+            --orange: #f97316;
+            --slate: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.5;
+            padding-bottom: 5rem;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Particles */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            background: rgba(99, 102, 241, 0.15);
+            border-radius: 50%;
+            bottom: -20px;
+            animation: floatUp 15s infinite linear;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            10% { opacity: 0.4; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(-110vh) scale(0.3); opacity: 0; }
+        }
+
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header / Hero */
+        header {
+            padding: 5rem 0 3rem 0;
+            text-align: center;
+            position: relative;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            color: #818cf8;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.35rem 0.9rem;
+            border-radius: 9999px;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #fff 0%, #8b949e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.75rem;
+        }
+        header p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* Nav */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(13, 17, 23, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        nav.scrolled {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            background: rgba(13, 17, 23, 0.95);
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 4.5rem;
+        }
+        .nav-logo {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .nav-logo-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--primary);
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Section styling */
+        section {
+            padding: 5rem 0 2rem 0;
+            scroll-margin-top: 4.5rem;
+        }
+        .section-header {
+            margin-bottom: 3rem;
+        }
+        .section-header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+        .section-header p {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+        }
+
+        /* KPI Banner */
+        .hero-kpis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .hero-kpis.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .kpi-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.75rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+        }
+        .kpi-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .kpi-card.c-1::before { background: var(--primary); }
+        .kpi-card.c-2::before { background: var(--cyan); }
+        .kpi-card.c-3::before { background: var(--amber); }
+        .kpi-card.c-4::before { background: var(--rose); }
+
+        .kpi-val {
+            font-size: 2.25rem;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+        }
+        .kpi-card.c-1 .kpi-val { color: var(--primary); }
+        .kpi-card.c-2 .kpi-val { color: var(--cyan); }
+        .kpi-card.c-3 .kpi-val { color: var(--amber); }
+        .kpi-card.c-4 .kpi-val { color: var(--rose); }
+
+        .kpi-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        /* segment-grid */
+        #segment-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+        .seg-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.45rem 1rem;
+            border: 1px solid;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: rgba(22, 27, 34, 0.4);
+            backdrop-filter: blur(8px);
+        }
+        .seg-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        .seg-count {
+            margin-left: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.05);
+            padding: 0.1rem 0.4rem;
+            border-radius: 10px;
+        }
+
+        /* Accordion */
+        #segments-accordion {
+            margin-top: 1.5rem;
+        }
+        .acc-item {
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            background: var(--card-bg);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .acc-item:hover {
+            border-color: rgba(255,255,255,0.08);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .acc-header {
+            display: flex;
+            align-items: center;
+            padding: 1.25rem 1.75rem;
+            cursor: pointer;
+            user-select: none;
+            gap: 1.25rem;
+        }
+        .acc-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .acc-info {
+            flex-grow: 1;
+        }
+        .acc-name {
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+        }
+        .acc-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.15rem;
+        }
+        .acc-kpis {
+            display: flex;
+            gap: 2rem;
+            margin-right: 1.5rem;
+        }
+        .acc-kpi {
+            text-align: right;
+        }
+        .acc-kpi-val {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+        .acc-kpi-key {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .acc-arrow {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            transition: transform 0.3s ease;
+        }
+        .acc-item.open .acc-arrow {
+            transform: rotate(180deg);
+        }
+        .acc-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border-top: 1px solid transparent;
+        }
+        .acc-item.open .acc-body {
+            max-height: 1000px;
+            border-top: 1px solid var(--border-color);
+        }
+        .acc-content {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 2.2fr 1fr;
+            gap: 2rem;
+        }
+        @media(max-width: 900px){
+            .acc-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        .acc-strategy {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .strategy-item {
+            padding: 1rem 1.25rem;
+            border-left: 3px solid;
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: 0 12px 12px 0;
+            border-color: var(--primary);
+        }
+        .strategy-text strong {
+            font-size: 0.95rem;
+            color: var(--text-main);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+        .strategy-text p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Playbook Grid */
+        #playbook-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        .playbook-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .playbook-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            border-color: rgba(255,255,255,0.08);
+        }
+        .playbook-top {
+            padding: 1.75rem;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(255,255,255,0.005);
+        }
+        .playbook-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        .playbook-name {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text-main);
+        }
+        .playbook-priority {
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            letter-spacing: 0.05em;
+        }
+        .priority-low { background: rgba(16,185,129,0.12); color: #10b981; }
+        .priority-medium { background: rgba(245,158,11,0.12); color: #f59e0b; }
+        .priority-high { background: rgba(249,115,22,0.12); color: #f97316; }
+        .priority-critical { background: rgba(244,63,94,0.12); color: #f43f5e; }
+        
+        .playbook-count {
+            font-size: 2.25rem;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+            line-height: 1;
+        }
+        .playbook-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+        .playbook-metrics {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .playbook-metric {
+            display: flex;
+            flex-direction: column;
+        }
+        .playbook-metric-val {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .playbook-metric-key {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+        .playbook-body {
+            padding: 1.75rem;
+            flex-grow: 1;
+        }
+        .campaign-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+        .campaign-item {
+            display: flex;
+            gap: 0.6rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+        .campaign-bullet {
+            color: var(--primary);
+            font-size: 0.6rem;
+            margin-top: 0.35rem;
+        }
+        .playbook-footer {
+            padding: 1.25rem 1.75rem;
+            border-top: 1px solid var(--border-color);
+            background: rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .lift-badge {
+            background: rgba(16,185,129,0.08);
+            border: 1px solid rgba(16,185,129,0.2);
+            color: #10b981;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+        .channel-tags {
+            display: flex;
+            gap: 0.4rem;
+        }
+        .channel-tag {
+            font-size: 0.65rem;
+            background: var(--border-color);
+            color: var(--text-muted);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* Charts grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        @media(max-width: 600px){
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .chart-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+        .chart-card:hover {
+            border-color: rgba(255,255,255,0.08);
+        }
+        .chart-card-header {
+            padding: 1.25rem 1.75rem;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(255,255,255,0.005);
+        }
+        .chart-card-title {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+        .chart-img-container {
+            padding: 1.5rem;
+            background: #0d1117;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .chart-img-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* SQL Tabs and Panels */
+        .sql-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem;
+            overflow: hidden;
+        }
+        #sql-tabs {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            overflow-x: auto;
+            padding-bottom: 1px;
+            scrollbar-width: thin;
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--text-muted);
+            padding: 0.85rem 1.25rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+        }
+        .tab-btn:hover {
+            color: var(--text-main);
+        }
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        
+        #sql-panels {
+            margin-top: 1.5rem;
+        }
+        .sql-panel {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        .sql-panel.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .sql-block {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .sql-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .sql-title {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--text-main);
+        }
+        .sql-badge {
+            background: rgba(99, 102, 241, 0.12);
+            color: #818cf8;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .copy-btn {
+            background: #21262d;
+            border: 1px solid #30363d;
+            color: #c9d1d9;
+            padding: 0.35rem 0.9rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .copy-btn:hover {
+            background: #30363d;
+            border-color: #8b949e;
+        }
+        .copy-btn.copied {
+            background: rgba(16, 185, 129, 0.12);
+            border-color: #10b981;
+            color: #10b981;
+        }
+        .sql-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+        .sql-code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            color: #c9d1d9;
+            background: #0d1117;
+            padding: 1.5rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        .footer-logo {
+            text-align: center;
+            margin-top: 6rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border-color);
+        }
+        .footer-logo p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Background Particles -->
+    <div id="particles"></div>
+
+    <!-- Sticky Navigation Bar -->
+    <nav id="nav">
+        <div class="container nav-container">
+            <a href="#hero" class="nav-logo">
+                <div class="nav-logo-dot"></div>
+                LTV Intelligence
+            </a>
+            <div class="nav-links">
+                <a href="#hero" class="nav-link active">Home</a>
+                <a href="#dashboard" class="nav-link">Dashboards</a>
+                <a href="#segments" class="nav-link">Cohorts</a>
+                <a href="#playbook" class="nav-link">Playbook</a>
+                <a href="#sql" class="nav-link">SQL Pipeline</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header / Hero Section -->
+    <header id="hero">
+        <div class="container">
+            <div class="hero-badge">
+                Consulting & Analytics Club · IIT Guwahati
+            </div>
+            <h1>Decoding Customer Value</h1>
+            <p>A SQL-first analytical audit and campaign playbook for promotional dependency reduction in a D2C Fashion Brand.</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        
+        <!-- KPI Banner -->
+        <div class="hero-kpis" data-animate>
+            <div class="kpi-card c-1">
+                <div class="kpi-val counter" data-target="4334">0</div>
+                <div class="kpi-label">Total Customers</div>
+            </div>
+            <div class="kpi-card c-2">
+                <div class="kpi-val">£<span class="counter" data-target="8767746">0</span></div>
+                <div class="kpi-label">Total Revenue</div>
+            </div>
+            <div class="kpi-card c-3">
+                <div class="kpi-val">£<span class="counter" data-target="369">0</span></div>
+                <div class="kpi-label">Avg Order Value</div>
+            </div>
+            <div class="kpi-card c-4">
+                <div class="kpi-val counter" data-target="1136">0</div>
+                <div class="kpi-label">Champions Cohort</div>
+            </div>
+        </div>
+
+        <!-- Section 1: Dashboard Visuals -->
+        <section id="dashboard">
+            <div class="section-header">
+                <h2>Analytical Dashboards</h2>
+                <p>High-resolution dashboards generated from the Python RFM segmentation pipeline.</p>
+            </div>
+            
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <span class="chart-card-title">Overview Dashboard</span>
+                    </div>
+                    <div class="chart-img-container">
+                        <img src="outputs/plots/dashboard_overview.png" alt="Overview Dashboard">
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <span class="chart-card-title">Segment Deep Dive</span>
+                    </div>
+                    <div class="chart-img-container">
+                        <img src="outputs/plots/dashboard_deepdive.png" alt="Segment Deep Dive">
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <span class="chart-card-title">Loyalty Definitions Comparison</span>
+                    </div>
+                    <div class="chart-img-container">
+                        <img src="outputs/plots/loyalty_definitions.png" alt="Loyalty Definitions">
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <span class="chart-card-title">Retention Playbook Matrix</span>
+                    </div>
+                    <div class="chart-img-container">
+                        <img src="outputs/plots/retention_playbook.png" alt="Retention Playbook Matrix">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Segment Cohorts Accordion -->
+        <section id="segments">
+            <div class="section-header">
+                <h2>Behavioral Cohorts</h2>
+                <p>Detailed profile breakdown of customer clusters derived via Recency, Frequency, and Monetary quintile scores.</p>
+            </div>
+            
+            <div id="segment-grid">
+                <!-- Populated dynamically by app.js -->
+            </div>
+            
+            <div id="segments-accordion">
+                <!-- Populated dynamically by app.js -->
+            </div>
+        </section>
+
+        <!-- Section 3: Retention Campaign Playbook -->
+        <section id="playbook">
+            <div class="section-header">
+                <h2>Retention Strategy Playbook</h2>
+                <p>Specific campaign targets, promotional sunsetting actions, and expected business lifts by segment.</p>
+            </div>
+            
+            <div id="playbook-grid">
+                <!-- Populated dynamically by app.js -->
+            </div>
+        </section>
+
+        <!-- Section 4: SQL Query Database Pipeline -->
+        <section id="sql">
+            <div class="section-header">
+                <h2>SQL Database Pipeline</h2>
+                <p>Database queries designed to replicate the cleaning, scoring, segmentation, and retention checks in PostgreSQL or BigQuery.</p>
+            </div>
+            
+            <div class="sql-section">
+                <div id="sql-tabs">
+                    <button class="tab-btn active" data-tab="rfm-base">RFM Base</button>
+                    <button class="tab-btn" data-tab="segmentation">Segmentation</button>
+                    <button class="tab-btn" data-tab="champions">VIP Profile</button>
+                    <button class="tab-btn" data-tab="at-risk">At-Risk Win-Back</button>
+                    <button class="tab-btn" data-tab="lost">Lost Sunset</button>
+                    <button class="tab-btn" data-tab="pareto">Pareto Curve</button>
+                    <button class="tab-btn" data-tab="cohort">Cohort Retention</button>
+                </div>
+                
+                <div id="sql-panels">
+                    <!-- Populated dynamically by app.js -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer-logo">
+            <p>Decoding Customer Value © 2026 · Consulting & Analytics Club, IIT Guwahati</p>
+        </footer>
+
+    </main>
+
+    <!-- App Logic Script -->
+    <script src="app.js" defer></script>
+</body>
+</html>

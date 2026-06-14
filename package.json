@@ -1,0 +1,14 @@
+{
+  "name": "decoding-customer-value-dashboard",
+  "version": "1.0.0",
+  "description": "Customer Value Intelligence Dashboard",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite --port 8000 --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
